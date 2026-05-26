@@ -1,16 +1,24 @@
+using apbd_task8_db_first_s28977.Data;
+using apbd_task8_db_first_s28977.Services;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var connectionString = builder.Configuration
+    .GetConnectionString("DefaultConnection");
+
+
+builder.Services.AddDbContext<UniversityTasksDbContext>(options => 
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<ISubmissionService, SubmissionService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
